@@ -1,6 +1,5 @@
-import java.io.*; 
-import java.util.List; 
-import java.util.ArrayList; 
+
+PVector camera = new PVector(0, 0), camDesiredPos;
 
 ArrayList<Animator> activeAnimations, desactiveAnimations;
 
@@ -21,7 +20,10 @@ abstract class Animator {public Animation anim;}
 //basic graphics function called on the processing setup
 //use here to load imaged, set constants and change primitive behaviours
 void SetGraphics()
-{    
+{
+  camera = new PVector(size.x/2, size.y/2);
+  camDesiredPos = camera;
+  rectMode(CENTER);
   imageMode(CENTER);
 
   activeAnimations = new ArrayList<Animator>();
@@ -89,8 +91,20 @@ private void Background(int howManyBg, float bgSize)
       image(image_background, (x * bgSize), (y * bgSize), bgSize, bgSize);
     }
   }
-  imageMode(CENTER);
+  imageMode(CENTER);  
+}
+
+public void Camera()
+{
+  camera = PVector.lerp(camera, camDesiredPos, 0.05);
   
+  if(0 + width/2 < camera.x && camera.x < size.x - width/2)
+  {
+    if(0 + height/2 < camera.y && camera.y < size.y - height/2)
+    {
+      camera(camera.x,camera.y, (height/2.0) / tan(PI*30.0 / 180.0), camera.x, camera.y, 0, 0, -1, 0); 
+    }
+  }         
 }
 
 

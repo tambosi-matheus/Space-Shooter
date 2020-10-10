@@ -15,7 +15,7 @@ PVector mouse;
 
 void Mouse()
 {
-  mouse = new PVector(mouseX - width/2, mouseY - height/2);
+  mouse = new PVector(width/2 - mouseX, height/2 - mouseY);
 }
 
 void keyPressed()

@@ -1,3 +1,7 @@
+import java.io.*; 
+import java.util.List; 
+import java.util.ArrayList;
+
 // arrays with game objects
 ArrayList<Solid> solids;
 ArrayList<Solid> addSolids, removeSolids;
@@ -18,8 +22,8 @@ float time;
 void setup()
 {
   size(900, 900, P3D);
-  SetGraphics();
   SetSize(howManyBackgrounds, bgSize);
+  SetGraphics();
   
   solids = new ArrayList<Solid>();  
   addSolids = new ArrayList<Solid>();
@@ -29,8 +33,8 @@ void setup()
 }
 
 void draw()
-{  
-  Debug();
+{    
   Mouse();
   MainUpdate();  
+  Debug();
 }

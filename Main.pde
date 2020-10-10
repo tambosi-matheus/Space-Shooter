@@ -11,11 +11,11 @@ void MainUpdate()
   {   
       s.Update();     
   }
-  
-  for(Solid s : solids)
-  {   
-      s.Collision();     
-  }
+ 
+   //Util.IterateCollisionList(Util.CreateCollisionGrid(solids, 4));
+   ArrayList<ArrayList<Solid>> sa = new ArrayList<ArrayList<Solid>>();
+   sa.add(solids);
+   Util.IterateCollisionList(sa);
   
   solids.remove(removeSolids);
   for(Solid s : addSolids)

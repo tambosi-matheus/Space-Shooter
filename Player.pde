@@ -1,17 +1,18 @@
 public class Player extends Solid
-{
-  public PVector pos;
+{ 
   private PVector vel, acel, firePoint;
   private float maxSpeed = 20, maxAcel= 10, angle, 
-    fireRate = 8, fireCooldown, bulletSpeed = 50, 
+    fireRate = 8, fireCooldown, bulletSpeed = 5, 
     fireRandomness = 0.05f, fireOffset = 20;
 
   public Player()
   {
-    pos = new PVector(size.x /2 , size.y/2);
+    super.pos = new PVector(size.x /2 , size.y/2);
     vel = new PVector(0, 0);
     acel = new PVector(0, 0);
     firePoint = new PVector(0, 0);
+    super.collWidth = 5;
+    super.collHeight = 5;
   }
 
   public void Update()
@@ -23,6 +24,7 @@ public class Player extends Solid
     }
     Movimentation();
     Shoot();
+    Camera();
   }
 
   private void Movimentation()
@@ -32,9 +34,7 @@ public class Player extends Solid
     else if(vel.mag() > 0.1f) angle = vel.heading() + HALF_PI;
     
     //set camera
-    camera(pos.x, pos.y, 
-      (height/2.0) / tan(PI*30.0 / 180.0), 
-      pos.x, pos.y, 0, 0, -1, 0);
+    camDesiredPos = pos;
       
     //set acceleration and velocity
     vel = vel.mult(0.95f);
@@ -56,15 +56,14 @@ public class Player extends Solid
    {
      float fireAngle = angle + random(-fireRandomness, fireRandomness);
      firePoint = new PVector(0, -fireOffset).rotate(angle);
-     
-     addSolids.add(new PlayerBullet(PVector.add(pos, firePoint), bulletSpeed, fireAngle));
+      addSolids.add(new PlayerBullet(PVector.add(pos, firePoint), bulletSpeed, fireAngle));
      fireCooldown = 0;
    }
   }
   
   public void Collision()
   {
-    
+    rect(pos.x, pos.y, collWidth, collHeight);
   }
 
   public void Show()
@@ -85,18 +84,19 @@ public class Player extends Solid
 }
 
 
-class PlayerBullet extends Solid
+public class PlayerBullet extends Solid
 {
-  public PVector pos;
   private PVector vel;
   private float angle;
   
   public PlayerBullet(PVector pos, float speed, float angle)
   {
-   this.pos = pos;
+   super.pos = pos;
    this.angle = angle;
    vel = new PVector(0, -1);
    vel.rotate(angle).mult(speed);
+   super.collWidth = 15;
+   super.collHeight = 15;
   }
   public void Update()
   {
@@ -105,9 +105,20 @@ class PlayerBullet extends Solid
     pos.add(add);
   }
   
-  public void Collision()
+  public void Collision(ArrayList<Solid> grid)
   {
-    
+    for (Solid s : grid)
+    {
+      if (s == this)
+        break;
+      if(Util.CheckCollision(pos, collWidth, collHeight, s.pos, s.collWidth, s.collHeight))
+      {
+       if(s.getClass().toGenericString() == "Enemy")
+       {
+         
+       }
+      }
+    }
   }
 
   public void Show()
@@ -116,6 +127,8 @@ class PlayerBullet extends Solid
 
     translate(pos.x, pos.y);
     rotate(angle);
+    fill(255, 0, 0);
+    rect(0, 0, collWidth, collHeight);
     image(image_player_bullet, 0, 0);
 
     popMatrix();
