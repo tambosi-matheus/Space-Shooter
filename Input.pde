@@ -1,11 +1,12 @@
 //main input tab, used to generate easier to use inputs
-//dont forget to call the mouse function on the processing draw
+//dont forget to call the mouse function on the processing draw to use the vector
 
 boolean keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI,
         keyJ, keyK, keyL, keyM, keyN, keyO, keyP, keyQ, keyR, 
         keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ, 
         keyUp, keyDown, keyLeft, keyRight, 
-        key1, key2, key3, key4, key5, key6, key7, key8, key9, key0;
+        key1, key2, key3, key4, key5, key6, key7, key8, key9, key0,
+        keyDebug;
         
         
 boolean mouseLeft, mouseRight, mouseCenter;
@@ -24,6 +25,7 @@ void keyPressed()
 
 void keyReleased()
 {
+  CheckDebugKeys();
   Key(keyCode, false);
 }
 

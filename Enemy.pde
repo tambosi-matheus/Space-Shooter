@@ -2,12 +2,13 @@ enum EnemyType {
   small, medium, big
 };
 
-public class Enemy implements Solid
+public class Enemy extends Solid
 {
   private PVector pos, vel, acel, firePoint;
   private float fireOffset = 3, angle, 
         maxSpeed = 5, maxAcel = 5,
-        range, fireRate = 5, fireCooldown;
+        range = 180f, fireRate = 5, fireCooldown;
+  private boolean showRange;
   
   public Enemy(float x, float y, EnemyType type)
   {
@@ -40,7 +41,24 @@ public class Enemy implements Solid
   
   private void Movimentation()
   {
-    angle = vel.heading() + HALF_PI;    
+    angle = vel.heading() + HALF_PI;
+    vel = vel.mult(0.95f);
+    if (vel.mag() < 0.1f) vel = new PVector(0, 0);
+    if(PVector.dist(pos, player.pos) > range)
+    {
+      acel = PVector.sub(player.pos, pos);
+      acel.normalize().mult(maxAcel);
+      vel.add(acel);
+      if (vel.mag() > maxSpeed)       
+        vel.add(acel).normalize().mult(maxSpeed);        
+      PVector finalVel = vel.copy();
+      finalVel.mult(deltaTime);
+      pos.add(finalVel);
+    }
+    else
+    {
+       vel = new PVector(0, 0); 
+    }
   }
   
   private void Shoot()
@@ -48,22 +66,47 @@ public class Enemy implements Solid
     fireCooldown += deltaTime;
     if(PVector.dist(pos, player.pos) < range && fireCooldown > 15 / fireRate)
     {
+      //addSolids.add(new EnemyBullet(pos, 5, angle));
       firePoint = new PVector(0, -fireOffset).rotate(angle);
       fireCooldown = 0;
     }
   }
   
+  public void Collision()
+  {
+ 
+  }
+  
 
   public void Show()
   {
+    Debug();
+    pushMatrix();
+
+    translate(pos.x, pos.y);
+    rotate(angle);
+    image(image_enemy_medium, 0, 0);
+
+    popMatrix();
+  }
+  
+  
+  private void Debug()
+  {
+    if(!keyE)
+    {     
+      noFill();
+      stroke(255, 255, 255);
+      
+      circle(pos.x, pos.y, 2*range);      
+    }
   }
 }
 
-class EnemyBullet implements Solid
+class EnemyBullet extends Solid
 {
-  
-  PVector pos, vel;
-  public PlayerBullet(PVector pos, float speed, float angle)
+  private PVector pos, vel;
+  public EnemyBullet(PVector pos, float speed, float angle)
   {
    this.pos = pos;
    vel = new PVector(0, -1);
@@ -78,6 +121,6 @@ class EnemyBullet implements Solid
 
   void Show()
   {
-    circle(pos.x, pos.y, 10);
+    //circle(pos.x, pos.y, 10);
   }
 }
