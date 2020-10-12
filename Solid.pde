@@ -1,7 +1,7 @@
 public abstract class Solid
 {  
-  public PVector pos = new PVector(0, 0);
-  public float collWidth = 0, collHeight = 0;
+  protected PVector pos = new PVector(), vel = new PVector();
+  public float collRadius;
   
   //main method for non-static objects, use to update
   //position, velocity, angle, etc

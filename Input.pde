@@ -11,11 +11,11 @@ boolean keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI,
         
 boolean mouseLeft, mouseRight, mouseCenter;
 
-PVector mouse;
+PVector mouse, mouseScreenPos;
 
 void Mouse()
 {
-  mouse = new PVector(mouseX, height/2 - mouseY);
+  mouse = new PVector(camera.x + width/2 - mouseX, camera.y + height/2 - mouseY);
 }
 
 void keyPressed()

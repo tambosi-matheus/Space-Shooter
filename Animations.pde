@@ -1,10 +1,10 @@
-class ExplosionAnim extends Animator
+class AnimationEnemyExplosion extends Animator
 {
   PVector pos;
   public Object[] sprites = explosion.toArray();
   int speed = 15;
  
- ExplosionAnim(PVector pos)
+ AnimationEnemyExplosion(PVector pos)
  {   
    anim = new Animation(speed, sprites);
    anim.Play(pos);

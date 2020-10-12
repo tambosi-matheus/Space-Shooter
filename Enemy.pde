@@ -2,37 +2,42 @@ enum EnemyType {
   small, medium, big
 };
 
+public ArrayList<PVector> spawns;
+
+public PVector GetRandomSpawn()
+{
+  int rand = (int) random(4);
+  switch(rand)
+  {
+    default:
+    return new PVector();
+  case 0: 
+    return new PVector(random(size.x), -50); 
+  case 1:
+    return new PVector(random(size.x), size.y + 50);
+  case 2: 
+    return new PVector(-50, random(size.y)); 
+  case 3:
+    return new PVector(size.x + 50, random(size.y));
+  }
+}
+
 public class Enemy extends Solid
 {    
-  private PVector vel, acel, firePoint;
+  private PVector acel, firePoint;
   private float fireOffset = 3, angle, 
-    maxSpeed = 5, maxAcel = 5, 
+    maxSpeed = 8, maxAcel = 0.3, 
     range = 180f, fireRate = 5, fireCooldown;
-  private boolean showRange;
 
-  public Enemy(float x, float y, EnemyType type)
+  public Enemy()
   {
-    super.pos = new PVector(x, y);
-    vel = new PVector(0, 0);
-    acel = new PVector(0, 0);
-    super.collWidth = 15;
-    super.collHeight = 15;
+    pos = GetRandomSpawn(); 
+    collRadius = 15;
 
-    switch(type)
-    {
-    case small:
-
-      break;
-
-    case medium:
-
-      break;
-
-    case big:
-
-      break;
-    }
+    vel = new PVector();
+    acel = new PVector();
   }
+
 
   public void Update()
   {
@@ -43,19 +48,20 @@ public class Enemy extends Solid
 
   private void Movimentation()
   {
-    angle = vel.heading() + HALF_PI;
+    angle = PVector.sub(player.pos, pos).heading() + HALF_PI;
+    if (vel.mag() < 0.1f)
+      vel = new PVector(0, 0);
     vel = vel.mult(0.95f);
-    if (vel.mag() < 0.1f) vel = new PVector(0, 0);
     if (PVector.dist(pos, player.pos) > range)
     {
       acel = PVector.sub(player.pos, pos);
       acel.normalize().mult(maxAcel);
       vel.add(acel);
-      if (vel.mag() > maxSpeed)       
-        vel.add(acel).normalize().mult(maxSpeed);        
-      PVector finalVel = vel.copy();
+      if (this.vel.mag() > maxSpeed)       
+        this.vel.normalize().mult(maxSpeed);        
+      PVector finalVel = this.vel.copy();
       finalVel.mult(deltaTime);
-      pos.add(finalVel);
+      this.pos.add(finalVel);
     } else
     {
       vel = new PVector(0, 0);
@@ -75,63 +81,36 @@ public class Enemy extends Solid
 
   public void Collision(ArrayList<Solid> grid)
   {
-    for (Solid s : grid)
-    {
-      if (s == this)
-        break;
-      if(Util.CheckCollision(pos, collWidth, collHeight, s.pos, s.collWidth, s.collHeight))
-      {
-        if(s.getClass().toGenericString().equals("public class SpaceShooter$Enemy"))
-        {
-          break;
-        }
-       println(s.getClass().toGenericString());
-       if(s.getClass().toGenericString().equals("public class SpaceShooter$PlayerBullet"))
-       {
-         println("its workin!");
-         removeSolids.add(this);
-       }
-      }
-    }
   }
 
 
   public void Show()
   {
-    Debug();
     pushMatrix();
 
     translate(pos.x, pos.y);
     rotate(angle);
     fill(0, 255, 0);
-    rect(0, 0, collWidth, collHeight);
     image(image_enemy_medium, 0, 0);
 
     popMatrix();
   }
-
-
-  private void Debug()
-  {
-    if (!keyE)
-    {     
-      noFill();
-      stroke(255, 255, 255);
-
-      circle(pos.x, pos.y, 2*range);
-    }
-  }
 }
 
 class EnemyBullet extends Solid
-{
-  private PVector pos, vel;
+{ 
   public EnemyBullet(PVector pos, float speed, float angle)
   {
     this.pos = pos;
     vel = new PVector(0, -1);
     vel.rotate(angle).mult(speed);
+    super.collRadius = 15;
   }
+
+  public PVector getPos() {
+    return pos;
+  }
+
   void Update()
   {
     PVector add = vel.copy();
@@ -143,5 +122,4 @@ class EnemyBullet extends Solid
   {
     //circle(pos.x, pos.y, 10);
   }
- 
 }

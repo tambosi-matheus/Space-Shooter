@@ -1,30 +1,32 @@
 void MainUpdate()
 {
   clear();
+  //
   addSolids = new ArrayList<Solid>();
   removeSolids = new ArrayList<Solid>();
   deltaTime = (millis() - time)/100;
   time = millis();
   
-  //main solid loop
+  // main game objects loop
   for(Solid s : solids)
   {   
       s.Update();     
   }
  
-   //Util.IterateCollisionList(Util.CreateCollisionGrid(solids, 4));
-   ArrayList<ArrayList<Solid>> sa = new ArrayList<ArrayList<Solid>>();
-   sa.add(solids);
-   Util.IterateCollisionList(sa);
+   // collision check
+   Util.IterateCollisionList(Util.CreateCollisionGrid(solids, 40));
+
+  if(random(1) < 0.05)
+    addSolids.add(new Enemy());
   
-  solids.remove(removeSolids);
+  // graphics loop
+  Graphics();
+  
+  // game objects array maneuvering
+  solids.removeAll(removeSolids);
   for(Solid s : addSolids)
   {
     solids.add(s);  
   }
   
-  //collision check
-  
-  
-  Graphics();
 }

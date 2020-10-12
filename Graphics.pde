@@ -1,17 +1,18 @@
+public static PVector size;
 
-PVector camera = new PVector(0, 0), camDesiredPos;
+public PVector camera = new PVector(0, 0), camDesiredPos;
 
-ArrayList<Animator> activeAnimations, desactiveAnimations;
+public ArrayList<Animator> activeAnimations, desactiveAnimations;
 
 //create image variables here ('image_' prefix)
-PImage 
+public PImage 
   image_player_left, image_player_middle, image_player_right, image_player_bullet, 
   image_cursor, image_background, 
   image_explosion_0, image_explosion_1, image_explosion_2, image_explosion_3, 
   image_explosion_4, image_explosion_5, image_explosion_6, image_explosion_7,
   image_enemy_small, image_enemy_medium, image_enemy_big;
 
-ArrayList<PImage> explosion, player_bullet;
+public ArrayList<PImage> explosion, player_bullet;
 
 //class that every animation should derive from
 //as all game animations graphic arrays are managed based on 
@@ -95,16 +96,13 @@ private void Background(int howManyBg, float bgSize)
 }
 
 public void Camera()
-{
-  camera = PVector.lerp(camera, camDesiredPos, 0.05);
-  
-  if(0 + width/2 < camera.x && camera.x < size.x - width/2)
-  {
-    if(0 + height/2 < camera.y && camera.y < size.y - height/2)
-    {
-      camera(camera.x,camera.y, (height/2.0) / tan(PI*30.0 / 180.0), camera.x, camera.y, 0, 0, -1, 0); 
-    }
-  }         
+{   
+  PVector nextCamPos = PVector.lerp(camera, camDesiredPos, 0.05);
+  if(0 + width/2 < nextCamPos.x && nextCamPos.x < size.x - width/2)
+    camera.x = nextCamPos.x;
+  if(0 + height/2 < nextCamPos.y && nextCamPos.y < size.y - height/2)    
+      camera.y = nextCamPos.y;  
+  camera(camera.x,camera.y, (height/2.0) / tan(PI*30.0 / 180.0), camera.x, camera.y, 0, 0, -1, 0); 
 }
 
 

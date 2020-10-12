@@ -1,5 +1,9 @@
 public static class Util
 {
+  public static Util Instance = new Util();
+  
+  private Util(){};  
+  
  public static ArrayList<ArrayList<Solid>> CreateCollisionGrid(ArrayList<Solid> generalArray, int gridSize)
  {
    ArrayList<Solid> arrayClone = (ArrayList)generalArray.clone();
@@ -33,22 +37,35 @@ public static class Util
  {
    for(ArrayList<Solid> cell : grid)
    {
-    for(Solid s : cell)
+    for(Solid solid : cell)
     {
-      s.Collision(cell); 
+      solid.Collision(cell); 
     }
    }
  }
  
- public static boolean CheckCollision(PVector pos1, float w1,float h1, PVector pos2, float w2, float h2)
+ public static boolean CheckCollision(PVector pos1, PVector vel1, float r1, PVector pos2, PVector vel2, float r2)
  {
-    if(pos1.x + w1/2 > pos2.x - w2/2 && 
-        pos1.x - w1/2 < pos2.x + w2/2 &&
-        pos1.y + h1/2 > pos2.y - h2/2 && 
-        pos1.y - h1/2 < pos2.y + h2/2)
+    if(PVector.dist(pos1, pos2) < r1 + r2)
     {
      return true;
     }
     else return false;
  }
+
+ public static ArrayList<PVector> SetEnemySpawns()
+ {
+   ArrayList<PVector> s = new ArrayList<PVector>();
+   s.add(new PVector(0, 0));
+   s.add(new PVector(size.x/2, 0));
+   s.add(new PVector(size.x, 0));
+   s.add(new PVector(0, size.y/2));
+   s.add(new PVector(size.x, size.y));
+   s.add(new PVector(0, size.y));
+   s.add(new PVector(size.x/2, size.y));
+   s.add(new PVector(size.x, size.y));
+   return s;  
+ }
+ 
+
 }
