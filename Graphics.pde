@@ -37,7 +37,8 @@ abstract class Animator {
 //use here to load imaged, set constants and change primitive behaviours
 void SetGraphics()
 {
-  camera = new PVector(size.x/2, size.y/2);
+  //camera = new PVector(size.x/2, size.y/2);
+  camera = new PVector(width/2, height/2);
   camDesiredPos = camera;
   rectMode(CENTER);
   imageMode(CENTER);

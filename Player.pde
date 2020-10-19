@@ -9,7 +9,7 @@ public class Player extends Solid
 
   public Player()
   {
-    pos = new PVector(size.x /2, size.y/2);
+    pos = new PVector(size.x/2, size.y/2);
     vel = new PVector();
     collRadius = 50;
 

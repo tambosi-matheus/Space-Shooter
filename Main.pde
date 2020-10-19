@@ -12,6 +12,7 @@ void SetMain()
   removeSolids = new ArrayList<Solid>();
   player = new Player();
   solids.add(player);
+  camera = player.pos.copy();
   audio_main_background = new SoundFile(this, "audio/background" + (int)random(1, 6) + ".wav");
   audio_main_background.loop(1, 0.15f);
 }

@@ -8,10 +8,10 @@ public void SetMenu()
   playSize = new PVector(120, 40);
   playMaxSize = new PVector(132, 44);
   playMinSize = new PVector(120, 40);
-  soundPos = new PVector(width / 5, height/4);
+  soundPos = new PVector(width/2 - width/10, + height/4);
   titlePos = new PVector(0, - height/2 + height/10);
   controlsPos = new PVector(0, + height/4);
-  creditsPos= new PVector(0, + height/2 - height/10);
+  creditsPos= new PVector(0, height/2 - height/10);
   soundSize = new PVector(32, 32);
   audioOption = 1;
   image_sound = loadImage("images/sound_medium.png");

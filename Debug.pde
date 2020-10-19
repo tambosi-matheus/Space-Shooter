@@ -1,5 +1,5 @@
 void Debug()
-{
+{  
   //ShowSolidsDebug();
   //ShowMousePlayerPointer();
   //ShowCollisionGrid(4);
@@ -61,10 +61,12 @@ public void ShowSolidsDebug()
 public void ShowCameraDebug()
 {
   //camera position
+  noStroke();
   fill(0, 255, 0);
   circle(camera.x, camera.y, 5);  
   
   //camera desired position
+  noStroke();
   fill(255, 0, 0);
   circle(camDesiredPos.x, camDesiredPos.y, 5);
 }

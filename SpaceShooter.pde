@@ -9,6 +9,7 @@ private GameStates gameState = GameStates.MENU;
 
 void setup()
 {
+  //size(1000, 1000, P3D);
   fullScreen(P3D);
   SetSize(); 
   SetGraphics();
