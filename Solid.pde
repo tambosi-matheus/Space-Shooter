@@ -1,3 +1,7 @@
+// arrays with game objects
+ArrayList<Solid> solids;
+ArrayList<Solid> addSolids, removeSolids;
+
 public abstract class Solid
 {  
   protected PVector pos = new PVector(), vel = new PVector();
@@ -14,6 +18,8 @@ public abstract class Solid
   //if it has, leave this blank
   public void Show(){};
 }
+
+//--------------------------------------------------------------------------------//
 
 public class Collision
 {  

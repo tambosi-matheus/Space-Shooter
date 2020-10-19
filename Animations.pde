@@ -11,6 +11,8 @@ class AnimationEnemyExplosion extends Animator
  }
 }
 
+//--------------------------------------------------------------------------------//
+
 class PlayerBulletAnim extends Animator
 {
   PVector pos;

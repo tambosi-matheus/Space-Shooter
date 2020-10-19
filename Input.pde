@@ -1,5 +1,6 @@
-//main input tab, used to generate easier to use inputs
-//dont forget to call the mouse function on the processing draw to use the vector
+// main input tab, used to generate easier to use inputs
+// if you're using P3D. dont forget to call the mouse function 
+// on the processing draw to use the vector
 
 boolean keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI,
         keyJ, keyK, keyL, keyM, keyN, keyO, keyP, keyQ, keyR, 
@@ -24,7 +25,7 @@ void keyPressed()
 }
 
 void keyReleased()
-{
+{ 
   CheckDebugKeys();
   Key(keyCode, false);
 }
@@ -36,8 +37,11 @@ void mousePressed()
 
 void mouseReleased()
 {
+  MenuSound();
   Mouse(mouseButton, false);
 }
+
+//--------------------------------------------------------------------------------//
 
 public boolean Mouse(final int m, final boolean b)
 {
@@ -52,6 +56,8 @@ public boolean Mouse(final int m, final boolean b)
   }
   return b;
 }
+
+//--------------------------------------------------------------------------------//
 
 public boolean Key(final int k, final boolean b) 
 {

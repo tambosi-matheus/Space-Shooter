@@ -1,3 +1,5 @@
+Player player;
+
 public class Player extends Solid
 { 
   private PVector acel, firePoint;
@@ -21,17 +23,16 @@ public class Player extends Solid
   {     
     Movimentation();
     Shoot();
-    Camera();
   }
 
   private void Movimentation()
   {
     //calc rotation
-    if (mouseRight) angle = PVector.sub(mouse, pos).heading() + HALF_PI;    
-    else if (vel.mag() > 0.1f) angle = vel.heading() + HALF_PI;
-
-    //set camera
-    camDesiredPos = pos;
+    if (mouseRight)
+      angle = PVector.sub(mouse, pos).heading() + HALF_PI; 
+    else if (vel.mag() > 0.1f)
+      angle = vel.heading() + HALF_PI;    
+    
 
     //set acceleration and velocity
     vel = vel.mult(0.9f);
@@ -54,6 +55,8 @@ public class Player extends Solid
       float fireAngle = angle + random(-fireRandomness, fireRandomness);
       firePoint = new PVector(0, -fireOffset).rotate(angle);
       addSolids.add(new PlayerBullet(PVector.add(pos, firePoint), bulletSpeed, fireAngle));
+      audio_player_shooting.stop();
+      audio_player_shooting.play();
       fireCooldown = 0;
     }
   }
@@ -67,9 +70,13 @@ public class Player extends Solid
 
       if (Util.CheckCollision(pos, vel, collRadius, s.pos, new PVector(), s.collRadius))
       {        
-        if (s.getClass().toGenericString().equals("public class SpaceShooter$Enemy"))
+        String solidClass = s.getClass().toGenericString();
+        if (solidClass.equals("public class SpaceShooter$SmallEnemy")|| 
+            solidClass.equals("public class SpaceShooter$MediumEnemy")||
+            solidClass.equals("public class SpaceShooter$MediumEnemyBullet")||
+            solidClass.equals("public class SpaceShooter$BigEnemy"))
         {
-          println("player colliding with enemy");
+          //gameStates;
         }
       }
     }
@@ -92,6 +99,7 @@ public class Player extends Solid
   }
 }
 
+//--------------------------------------------------------------------------------//
 
 public class PlayerBullet extends Solid
 {
@@ -124,12 +132,37 @@ public class PlayerBullet extends Solid
         continue;
 
       if (Util.CheckCollision(pos, vel, collRadius, s.pos, new PVector(), s.collRadius))
-      {        
-        if (s.getClass().toGenericString().equals("public class SpaceShooter$Enemy"))
+      {   
+        if (s.getClass().toGenericString().equals("public class SpaceShooter$SmallEnemy"))
         {
+          score += 50;
           removeSolids.add(this);
           removeSolids.add(s);
           activeAnimations.add(new AnimationEnemyExplosion(pos));
+          audio_enemy_small_death.stop();
+          audio_enemy_small_death.play();
+          break;
+        }
+        else if (s.getClass().toGenericString().equals("public class SpaceShooter$MediumEnemy"))
+        {
+          score += 250;
+          removeSolids.add(this);
+          removeSolids.add(s);
+          activeAnimations.add(new AnimationEnemyExplosion(pos));
+          audio_enemy_medium_death.stop();
+          audio_enemy_medium_death.play();
+          break;
+        }                
+        
+        else if (s.getClass().toGenericString().equals("public class SpaceShooter$BigEnemy"))
+        {
+          score += 1000;
+          removeSolids.add(this);
+          removeSolids.add(s);
+          activeAnimations.add(new AnimationEnemyExplosion(pos));
+          audio_enemy_big_death.stop();
+          audio_enemy_big_death.play();
+          break;
         }
       }
     }

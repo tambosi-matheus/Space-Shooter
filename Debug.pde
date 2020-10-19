@@ -1,10 +1,12 @@
 void Debug()
 {
   //ShowSolidsDebug();
-  //ShowMousePointer();
+  //ShowMousePlayerPointer();
   //ShowCollisionGrid(4);
   //ShowCameraDebug();
 }
+
+//--------------------------------------------------------------------------------//
 
 public void CheckDebugKeys()
 {
@@ -14,6 +16,8 @@ public void CheckDebugKeys()
   {
   }
 }
+
+//--------------------------------------------------------------------------------//
 
 public void ShowCollisionGrid(int gridSize)
 {    
@@ -31,12 +35,16 @@ public void ShowCollisionGrid(int gridSize)
   }
 }
 
-public void ShowMousePointer()
+//--------------------------------------------------------------------------------//
+
+public void ShowMousePlayerPointer()
 {
   stroke(255, 255, 0);
   strokeWeight(1);
   line(mouse.x, mouse.y, 0, player.pos.x, player.pos.y, 0);
 }
+
+//--------------------------------------------------------------------------------//
 
 public void ShowSolidsDebug()
 {
@@ -47,6 +55,8 @@ public void ShowSolidsDebug()
   println("Solids Added: " + addSolids.size());
   println("Solids Removed: " + removeSolids.size()); 
 }
+
+//--------------------------------------------------------------------------------//
 
 public void ShowCameraDebug()
 {
