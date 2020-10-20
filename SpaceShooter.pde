@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 enum GameStates {
-  MENU, MAIN, ENDSCREEN
+  MENU, MAIN, END
 };
 private GameStates gameState = GameStates.MENU;
 
@@ -29,7 +29,7 @@ void draw()
     MainUpdate();
     Debug();
     break;
-  case ENDSCREEN:    
+  case END:    
     EndscreenUpdate();
     break;
   }   

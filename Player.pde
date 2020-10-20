@@ -6,6 +6,7 @@ public class Player extends Solid
   private float maxSpeed = 20, maxAcel= 10, angle, 
     fireRate = 8, fireCooldown, bulletSpeed = 50, 
     fireRandomness = 0.05f, fireOffset = 20;
+  public boolean isDead = false;
 
   public Player()
   {
@@ -20,7 +21,12 @@ public class Player extends Solid
   public PVector getPos(){return pos;}
 
   public void Update()
-  {     
+  {
+    if(isDead)
+    {
+      if(audio_player_death.is)
+      return;
+    }
     Movimentation();
     Shoot();
   }
@@ -76,7 +82,7 @@ public class Player extends Solid
             solidClass.equals("public class SpaceShooter$MediumEnemyBullet")||
             solidClass.equals("public class SpaceShooter$BigEnemy"))
         {
-          //gameStates;
+          isDead = true;
         }
       }
     }

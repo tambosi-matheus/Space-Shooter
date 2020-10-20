@@ -18,10 +18,12 @@ void SetAudio()
   s = new Sound(this);  
   audio_menu = new SoundFile(this, "audio/mainscreen.wav");
   audio_menu.amp(0.1f);
+  
   audio_endscreen_best_score = new SoundFile(this, "audio/endscreen_best_score.wav");
   audio_endscreen_best_score.amp(0.1f);
   audio_endscreen_death = new SoundFile(this, "audio/endscreen_death.wav");
   audio_endscreen_death.amp(0.1f);
+  
   audio_enemy_big_death = new SoundFile(this, "audio/enemy_big_death.wav");
   audio_enemy_big_death.amp(0.2f);
   audio_enemy_big_spawn = new SoundFile(this, "audio/enemy_big_spawn.wav");

@@ -182,7 +182,7 @@ public class MediumEnemy extends Solid
 
 //--------------------------------------------------------------------------------//
 
-class MediumEnemyBullet extends Solid
+public class MediumEnemyBullet extends Solid
 {
   private float angle;
 
