@@ -15,15 +15,24 @@ public ArrayList<Animator> activeAnimations, desactiveAnimations;
 public PFont font;
 //create image variables here ('image_' prefix)
 public PImage 
-  image_menu_logo, image_menu_madeby, image_menu_controls, image_menu_play,
+  image_menu_logo, image_menu_madeby, image_menu_controls, image_menu_play, 
   image_player_left, image_player_middle, image_player_right, image_player_bullet, 
   image_cursor1, image_cursor2, image_background, 
-  image_explosion_0, image_explosion_1, image_explosion_2, image_explosion_3, 
-  image_explosion_4, image_explosion_5, image_explosion_6, image_explosion_7, 
-  image_enemy_small, image_enemy_medium, image_enemy_big, image_enemy_medium_bullet,
+
+  image_enemy_explosion_0, image_enemy_explosion_1, image_enemy_explosion_2, image_enemy_explosion_3, 
+  image_enemy_explosion_4, image_enemy_explosion_5, image_enemy_explosion_6, image_enemy_explosion_7, 
+
+  image_player_explosion_0, image_player_explosion_1, image_player_explosion_2, image_player_explosion_3, 
+  image_player_explosion_4, image_player_explosion_5, image_player_explosion_6, image_player_explosion_7, 
+  image_player_explosion_8, image_player_explosion_9, image_player_explosion_10, image_player_explosion_11, 
+  image_player_explosion_12, image_player_explosion_13, image_player_explosion_14, image_player_explosion_15, 
+  image_player_explosion_16, image_player_explosion_17, image_player_explosion_18, image_player_explosion_19, 
+  image_player_explosion_20, image_player_explosion_21, 
+
+  image_enemy_small, image_enemy_medium, image_enemy_big, image_enemy_medium_bullet, 
   image_sound;
 
-public ArrayList<PImage> explosion, player_bullet;
+public ArrayList<PImage> enemy_explosion, player_explosion;
 
 //class that every animation should derive from
 //as all game animations graphic arrays are managed based on 
@@ -37,53 +46,50 @@ abstract class Animator {
 //use here to load imaged, set constants and change primitive behaviours
 void SetGraphics()
 {
-  //camera = new PVector(size.x/2, size.y/2);
-  camera = new PVector(width/2, height/2);
-  camDesiredPos = camera;
+  noCursor();    
   rectMode(CENTER);
   imageMode(CENTER);
+  textAlign(CENTER, CENTER);
 
   activeAnimations = new ArrayList<Animator>();
   desactiveAnimations = new ArrayList<Animator>();
-  
-  font = createFont("fonts/karma suture.ttf", 20);
+
+  SetImageData();  
   textFont(font, 14);
 
-  image_menu_logo = loadImage("images/menu_logo.png");
-  image_menu_play = loadImage("images/menu_play.png");
-  image_menu_controls = loadImage("images/menu_controls.png");
-  image_menu_madeby = loadImage("images/menu_madeby.png"); 
-  
-  image_player_left = loadImage("images/player left.png");
-  image_player_middle = loadImage("images/player middle.png");
-  image_player_right = loadImage("images/player right.png");   
-  image_player_bullet = loadImage("images/player bullet.png");
-  image_cursor1 = loadImage("images/crosshair1.png");
-  image_cursor2 = loadImage("images/crosshair2.png");  
-  image_explosion_0 = loadImage("images/player explosion 0.png");
-  image_explosion_1 = loadImage("images/player explosion 1.png");
-  image_explosion_2 = loadImage("images/player explosion 2.png");
-  image_explosion_3 = loadImage("images/player explosion 3.png");
-  image_explosion_4 = loadImage("images/player explosion 4.png");
-  image_explosion_5 = loadImage("images/player explosion 5.png");
-  image_explosion_6 = loadImage("images/player explosion 6.png");
-  image_explosion_7 = loadImage("images/player explosion 7.png");
-  image_background = loadImage("images/background.png");
-  image_enemy_small = loadImage("images/enemy small.png");
-  image_enemy_medium = loadImage("images/enemy medium.png");
-  image_enemy_medium_bullet = loadImage("images/enemy medium bullet.png");
-  image_enemy_big = loadImage("images/enemy big.png");
+  enemy_explosion = new ArrayList<PImage>();
+  enemy_explosion.add(image_enemy_explosion_0);
+  enemy_explosion.add(image_enemy_explosion_1);
+  enemy_explosion.add(image_enemy_explosion_2);
+  enemy_explosion.add(image_enemy_explosion_3);
+  enemy_explosion.add(image_enemy_explosion_4);
+  enemy_explosion.add(image_enemy_explosion_5);
+  enemy_explosion.add(image_enemy_explosion_6);
+  enemy_explosion.add(image_enemy_explosion_7);
 
-
-  explosion = new ArrayList<PImage>();
-  explosion.add(image_explosion_0);
-  explosion.add(image_explosion_1);
-  explosion.add(image_explosion_2);
-  explosion.add(image_explosion_3);
-  explosion.add(image_explosion_4);
-  explosion.add(image_explosion_5);
-  explosion.add(image_explosion_6);
-  explosion.add(image_explosion_7);
+  player_explosion = new ArrayList<PImage>();
+  player_explosion.add(image_player_explosion_0);
+  player_explosion.add(image_player_explosion_1);
+  player_explosion.add(image_player_explosion_2);
+  player_explosion.add(image_player_explosion_3);
+  player_explosion.add(image_player_explosion_4);
+  player_explosion.add(image_player_explosion_5);
+  player_explosion.add(image_player_explosion_6);
+  player_explosion.add(image_player_explosion_7);
+  player_explosion.add(image_player_explosion_8);
+  player_explosion.add(image_player_explosion_9);
+  player_explosion.add(image_player_explosion_10);
+  player_explosion.add(image_player_explosion_11);
+  player_explosion.add(image_player_explosion_12);
+  player_explosion.add(image_player_explosion_13);
+  player_explosion.add(image_player_explosion_14);
+  player_explosion.add(image_player_explosion_15);
+  player_explosion.add(image_player_explosion_16);
+  player_explosion.add(image_player_explosion_17);
+  player_explosion.add(image_player_explosion_18);
+  player_explosion.add(image_player_explosion_19);
+  player_explosion.add(image_player_explosion_20);
+  player_explosion.add(image_player_explosion_21);
 }
 
 //--------------------------------------------------------------------------------//
@@ -97,48 +103,42 @@ public void SetSize()
 //--------------------------------------------------------------------------------//
 
 void CursorImage()
-{
-  noCursor();
-  pushMatrix();        
-   if(gameState == GameStates.MENU)
-   {
-     translate((camera.x - width/2 + mouseX), (camera.y - height/2 + mouseY));
-     if(mouseLeft || mouseRight)
-       image(image_cursor1, 0, 0);
-     else
-       image(image_cursor2, 0, 0);
-   }
-   else if(gameState == GameStates.MAIN)
-   {
-     translate(mouse.x, mouse.y);
-     if(mouseRight)
-       image(image_cursor1, 0, 0);
-     else
-       image(image_cursor2, 0, 0);
-   }
-   else if(gameState == GameStates.ENDSCREEN)
-   {
-     translate((camera.x - width/2 + mouseX), (camera.y - height/2 + mouseY));
-     if(mouseLeft || mouseRight)
-       image(image_cursor1, 0, 0);
-     else
-       image(image_cursor2, 0, 0);
-   }
- popMatrix();
+{  
+  pushMatrix();
+  switch(gameState)
+  {
+  case MAIN:
+    translate(mouse.x, mouse.y);
+    if (mouseRight)
+      image(image_cursor1, 0, 0);
+    else
+      image(image_cursor2, 0, 0);
+    break;
+
+  default:
+    translate((camera.x - width/2 + mouseX), (camera.y - height/2 + mouseY));
+    if (mouseLeft || mouseRight)
+      image(image_cursor1, 0, 0);
+    else
+      image(image_cursor2, 0, 0);
+    break;
+  }
+  popMatrix();
 }
 
-void MenuGraphics()
+//--------------------------------------------------------------------------------//
+
+public void MenuGraphics()
 {
   Background(howManyBackgrounds, bgSize); 
   pushMatrix();
-    translate(camera.x, camera.y);
-    image(image_menu_logo, titlePos.x, titlePos.y, 450, 75);
-    image(image_menu_play, 0, 0, playSize.x, playSize.y);
-    image(image_menu_controls, controlsPos.x, controlsPos.y, 400, 25);
-    image(image_menu_madeby, creditsPos.x, creditsPos.y, 200, 20);
-    image(image_sound, soundPos.x, soundPos.y, soundSize.x, soundSize.y);    
+  translate(camera.x, camera.y);
+  image(image_menu_logo, titlePos.x, titlePos.y, 450, 75);
+  image(image_menu_play, 0, 0, playSize.x, playSize.y);
+  image(image_menu_controls, controlsPos.x, controlsPos.y, 400, 25);
+  image(image_menu_madeby, creditsPos.x, creditsPos.y, 200, 20);
+  image(image_sound, soundPos.x, soundPos.y, soundSize.x, soundSize.y);    
   popMatrix();
-  camera(camera.x, camera.y, (height/2.0) / tan(PI*30.0 / 180.0), camera.x, camera.y, 0, 0, 1, 0);
 }
 
 //--------------------------------------------------------------------------------//
@@ -156,15 +156,33 @@ void MainGraphics()
   {
     animator.anim.Animator(animator);
   }
-  
+
   pushMatrix();
-    translate(camera.x + width/2 - width/20, camera.y + + height/2 - height/20);
-    scale(-1,  -1);
-    fill(255, 255, 255);    
-    text("Score: " + (int)score, 0, 0);
+  translate(camera.x + width/2 - width/20, camera.y + + height/2 - height/20);
+  scale(-1, -1);
+  fill(255, 255, 255);
+  textSize(20);
+  text("Score: " + score, 10, 0);
   popMatrix();
-  
+
   activeAnimations.removeAll(desactiveAnimations);
+}
+
+//--------------------------------------------------------------------------------//
+
+public void EndscreenGraphics()
+{
+  Background(howManyBackgrounds, bgSize); 
+  pushMatrix();
+  translate(camera.x, camera.y);
+  image(image_menu_logo, titlePos.x, titlePos.y, 450, 75);  
+  textSize(80);
+  text("You scored " + score, 0, 0);
+  textSize(50);
+  text("Max Score " + score, 0, 200);
+  textSize(20);
+  text("Press 'R' to try again!", 0, 300);
+  popMatrix();
 }
 
 //--------------------------------------------------------------------------------//
@@ -186,8 +204,9 @@ private void Background(int howManyBg, float bgSize)
 
 public void Camera()
 {
+  if (gameState != GameStates.MAIN) return;
   PVector playerMousePointing = PVector.sub(mouse, player.pos);
-  float mag = constrain(playerMousePointing.mag(), 1, 50);
+  float mag = constrain(playerMousePointing.mag(), 1, 100);
   camDesiredPos = PVector.add(player.pos, playerMousePointing.normalize().mult(mag));
   PVector nextCamPos = PVector.lerp(camera, camDesiredPos, 0.05);
   if (width/2 + 150 < nextCamPos.x && nextCamPos.x < size.x - width/2 - 150)

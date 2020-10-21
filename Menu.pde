@@ -4,6 +4,9 @@ boolean mouseUp;
 
 public void SetMenu()
 {
+  camera = new PVector(width/2, height/2);
+  camDesiredPos = camera;
+  camera(camera.x, camera.y, ((height/2.0) / tan(PI*30.0 / 180.0)), camera.x, camera.y, 0, 0, 1, 0);
   audio_menu.loop();
   playSize = new PVector(120, 40);
   playMaxSize = new PVector(132, 44);
@@ -28,7 +31,7 @@ public void MenuUpdate()
     if (mouseRight || mouseLeft)
     {
       audio_menu.stop();
-      gameState = GameStates.MAIN;
+      ChangeGameState(GameStates.MAIN);      
       SetMain();
     }
     playSize = PVector.lerp(playSize, playMaxSize, 0.1);

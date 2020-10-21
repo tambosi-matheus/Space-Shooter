@@ -1,7 +1,7 @@
 class AnimationEnemyExplosion extends Animator
 {
   PVector pos;
-  public Object[] sprites = explosion.toArray();
+  public Object[] sprites = enemy_explosion.toArray();
   int speed = 15;
  
  AnimationEnemyExplosion(PVector pos)
@@ -13,15 +13,15 @@ class AnimationEnemyExplosion extends Animator
 
 //--------------------------------------------------------------------------------//
 
-class PlayerBulletAnim extends Animator
+class AnimationPlayerExplosion extends Animator
 {
   PVector pos;
-  public Object[] sprites = player_bullet.toArray();
+  public Object[] sprites = player_explosion.toArray();
   int speed = 15;
  
- PlayerBulletAnim(PVector pos)
+ AnimationPlayerExplosion(PVector pos)
  {   
-   anim = new Animation(speed, true, sprites);
+   anim = new Animation(speed, sprites);
    anim.Play(pos);
  }
 }

@@ -59,11 +59,11 @@ public class SmallEnemy extends Solid
       acel = PVector.sub(player.pos, pos);
       acel.normalize().mult(maxAcel);
       vel.add(acel);
-      if (this.vel.mag() > maxSpeed)       
-        this.vel.normalize().mult(maxSpeed);        
-      PVector finalVel = this.vel.copy();
+      if (vel.mag() > maxSpeed)       
+        vel.normalize().mult(maxSpeed);        
+      PVector finalVel = vel.copy();
       finalVel.mult(deltaTime);
-      this.pos.add(finalVel);
+      pos.add(finalVel);
     } else
     {
       vel = new PVector(0, 0);
@@ -77,6 +77,8 @@ public class SmallEnemy extends Solid
 
     if (explosionCounter > explosionTimer)
     {
+      if(PVector.dist(player.pos, pos) < range)
+        player.OnPlayerHit();
       audio_enemy_small_explosion.stop();
       audio_enemy_small_explosion.play();
       removeSolids.add(this);
@@ -143,11 +145,11 @@ public class MediumEnemy extends Solid
       acel = PVector.sub(player.pos, pos);
       acel.normalize().mult(maxAcel);
       vel.add(acel);
-      if (this.vel.mag() > maxSpeed)       
-        this.vel.normalize().mult(maxSpeed);        
-      PVector finalVel = this.vel.copy();
+      if (vel.mag() > maxSpeed)       
+        vel.normalize().mult(maxSpeed);        
+      PVector finalVel = vel.copy();
       finalVel.mult(deltaTime);
-      this.pos.add(finalVel);
+      pos.add(finalVel);
     } else
     {
       vel = new PVector(0, 0);
@@ -163,6 +165,7 @@ public class MediumEnemy extends Solid
       audio_enemy_medium_shot.play();
       firePoint = new PVector(0, -fireOffset).rotate(angle);
       PVector bulletPos = pos.copy();
+      bulletPos.add(firePoint);
       addSolids.add(new MediumEnemyBullet(bulletPos, bulletSpeed, angle));
       fireCooldown = 0;
     }
@@ -189,7 +192,7 @@ public class MediumEnemyBullet extends Solid
   public MediumEnemyBullet(PVector pos, float speed, float angle)
   {
     this.pos = pos;    
-    super.collRadius = 15;
+    super.collRadius = 10;
     vel = new PVector(0, -1);
     this.vel.rotate(angle).mult(speed);
 
@@ -212,7 +215,7 @@ public class MediumEnemyBullet extends Solid
       if (s == this)     
         continue;
 
-      if (Util.CheckCollision(pos, vel, collRadius, s.pos, new PVector(), s.collRadius))
+      if (Util.CheckCollision(pos, collRadius, s.pos, s.collRadius))
       {        
         if (s.getClass().toGenericString().equals(""))
         {
@@ -225,10 +228,8 @@ public class MediumEnemyBullet extends Solid
   public void Show()
   {
     pushMatrix();
-
     translate(pos.x, pos.y);
     rotate(angle);
-    fill(255, 0, 0);
     image(image_enemy_medium_bullet, 0, 0);
 
     popMatrix();
@@ -241,8 +242,8 @@ public class BigEnemy extends Solid
 {    
   private PVector acel;
   private float spawnOffset = 10, angle, 
-    maxSpeed = 8, maxAcel = 0.3,
-    range = height / 3, spawnRate = 5, spawnCooldown;
+    maxSpeed = 10, maxAcel = 0.3,
+    range = height / 3, spawnRate = 7, spawnCooldown;
 
   public BigEnemy()
   {
@@ -272,11 +273,11 @@ public class BigEnemy extends Solid
       acel = PVector.sub(player.pos, pos);
       acel.normalize().mult(maxAcel);
       vel.add(acel);
-      if (this.vel.mag() > maxSpeed)       
-        this.vel.normalize().mult(maxSpeed);        
-      PVector finalVel = this.vel.copy();
+      if (vel.mag() > maxSpeed)       
+        vel.normalize().mult(maxSpeed);        
+      PVector finalVel = vel.copy();
       finalVel.mult(deltaTime);
-      this.pos.add(finalVel);
+      pos.add(finalVel);
     } else
     {
       vel = new PVector(0, 0);

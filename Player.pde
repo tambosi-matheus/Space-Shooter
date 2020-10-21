@@ -12,19 +12,22 @@ public class Player extends Solid
   {
     pos = new PVector(size.x/2, size.y/2);
     vel = new PVector();
-    collRadius = 50;
+    collRadius = 20;
 
     acel = new PVector();
     firePoint = new PVector();
   }
-  
-  public PVector getPos(){return pos;}
+
+  public PVector getPos() {
+    return pos;
+  }
 
   public void Update()
   {
-    if(isDead)
+    if (isDead)
     {
-      if(audio_player_death.is)
+      if(!audio_player_death.isPlaying())
+        ChangeGameState(GameStates.END); 
       return;
     }
     Movimentation();
@@ -38,7 +41,7 @@ public class Player extends Solid
       angle = PVector.sub(mouse, pos).heading() + HALF_PI; 
     else if (vel.mag() > 0.1f)
       angle = vel.heading() + HALF_PI;    
-    
+
 
     //set acceleration and velocity
     vel = vel.mult(0.9f);
@@ -74,24 +77,35 @@ public class Player extends Solid
       if (s == this)     
         continue;
 
-      if (Util.CheckCollision(pos, vel, collRadius, s.pos, new PVector(), s.collRadius))
+      if (Util.CheckCollision(pos, collRadius, s.pos, s.collRadius))
       {        
         String solidClass = s.getClass().toGenericString();
-        if (solidClass.equals("public class SpaceShooter$SmallEnemy")|| 
-            solidClass.equals("public class SpaceShooter$MediumEnemy")||
-            solidClass.equals("public class SpaceShooter$MediumEnemyBullet")||
-            solidClass.equals("public class SpaceShooter$BigEnemy"))
+        if (!isDead &&(
+          solidClass.equals("public class SpaceShooter$SmallEnemy")|| 
+          solidClass.equals("public class SpaceShooter$MediumEnemy")||
+          solidClass.equals("public class SpaceShooter$MediumEnemyBullet")||
+          solidClass.equals("public class SpaceShooter$BigEnemy")))
         {
-          isDead = true;
+          OnPlayerHit();
         }
       }
     }
   }
+  
+  public void OnPlayerHit()
+  {
+    if(isDead) return;
+    activeAnimations.add(new AnimationPlayerExplosion(pos));
+    audio_main_background.stop();
+    audio_player_death.stop();
+    audio_player_death.play();
+    isDead = true;
+  }
 
   public void Show()
   {
+    if(isDead) return;
     pushMatrix();
-
     translate(pos.x, pos.y);
     rotate(angle);
     if (acel.x < 0.5)
@@ -120,9 +134,7 @@ public class PlayerBullet extends Solid
 
     this.angle = angle;
   }
-  
-  public PVector getPos(){return pos;}
-  
+
   public void Update()
   {
     PVector add = vel.copy();
@@ -137,7 +149,7 @@ public class PlayerBullet extends Solid
       if (s == this)     
         continue;
 
-      if (Util.CheckCollision(pos, vel, collRadius, s.pos, new PVector(), s.collRadius))
+      if (Util.CheckCollision(pos, collRadius, s.pos, s.collRadius))
       {   
         if (s.getClass().toGenericString().equals("public class SpaceShooter$SmallEnemy"))
         {
@@ -148,8 +160,7 @@ public class PlayerBullet extends Solid
           audio_enemy_small_death.stop();
           audio_enemy_small_death.play();
           break;
-        }
-        else if (s.getClass().toGenericString().equals("public class SpaceShooter$MediumEnemy"))
+        } else if (s.getClass().toGenericString().equals("public class SpaceShooter$MediumEnemy"))
         {
           score += 250;
           removeSolids.add(this);
@@ -158,9 +169,7 @@ public class PlayerBullet extends Solid
           audio_enemy_medium_death.stop();
           audio_enemy_medium_death.play();
           break;
-        }                
-        
-        else if (s.getClass().toGenericString().equals("public class SpaceShooter$BigEnemy"))
+        } else if (s.getClass().toGenericString().equals("public class SpaceShooter$BigEnemy"))
         {
           score += 1000;
           removeSolids.add(this);
