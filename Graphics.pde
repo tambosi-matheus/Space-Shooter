@@ -96,7 +96,7 @@ void SetGraphics()
 
 public void SetSize()
 {
-  howManyBackgrounds = (int)(displayWidth * 1.5 / bgSize);
+  howManyBackgrounds = (int)(width * 1.5 / bgSize);
   size = new PVector((howManyBackgrounds * bgSize), (howManyBackgrounds * bgSize));
 }
 
@@ -176,10 +176,11 @@ public void EndscreenGraphics()
   pushMatrix();
   translate(camera.x, camera.y);
   image(image_menu_logo, titlePos.x, titlePos.y, 450, 75);  
+  fill(255, 255, 255);
   textSize(80);
   text("You scored " + score, 0, 0);
   textSize(50);
-  text("Max Score " + score, 0, 200);
+  text("Max Score " + highScore, 0, 200);
   textSize(20);
   text("Press 'R' to try again!", 0, 300);
   popMatrix();

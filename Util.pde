@@ -64,4 +64,16 @@ public static class Util
     s.add(new PVector(size.x, size.y));
     return s;
   }
+  
+  public static ArrayList<Solid> RemoveExternalSolids(ArrayList<Solid> solids)
+  {
+     ArrayList<Solid> toRemove = new ArrayList();
+     for(Solid s : solids)
+     {
+       if(s.pos.x + 500 > size.x || s.pos.x - 500 > 0 ||
+       s.pos.y + 500 > size.y || s.pos.y - 500 > 0)
+         toRemove.add(s);
+     }
+     return toRemove;
+  }
 }

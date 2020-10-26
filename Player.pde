@@ -18,16 +18,12 @@ public class Player extends Solid
     firePoint = new PVector();
   }
 
-  public PVector getPos() {
-    return pos;
-  }
-
   public void Update()
   {
     if (isDead)
     {
-      if(!audio_player_death.isPlaying())
-        ChangeGameState(GameStates.END); 
+      if (!audio_player_death.isPlaying())
+        ChangeGameState(GameStates.END);
       return;
     }
     Movimentation();
@@ -50,10 +46,14 @@ public class Player extends Solid
     acel.normalize().mult(maxAcel);
     vel.add(acel);
     if (vel.mag() > maxSpeed)       
-      vel.normalize().mult(maxSpeed);        
+      vel.normalize().mult(maxSpeed);
     PVector finalVel = vel.copy();
     finalVel.mult(deltaTime);
-    pos.add(finalVel);
+    PVector boundaries = PVector.add(finalVel, pos);
+    if (boundaries.x + 200 < size.x && boundaries.x > 200)
+      pos.x += finalVel.x;
+    if(boundaries.y + 200< size.y && boundaries.y > 200) 
+      pos.y += finalVel.y;
   }
 
   private void Shoot()
@@ -91,10 +91,10 @@ public class Player extends Solid
       }
     }
   }
-  
+
   public void OnPlayerHit()
   {
-    if(isDead) return;
+    if (isDead) return;
     activeAnimations.add(new AnimationPlayerExplosion(pos));
     audio_main_background.stop();
     audio_player_death.stop();
@@ -104,7 +104,7 @@ public class Player extends Solid
 
   public void Show()
   {
-    if(isDead) return;
+    if (isDead) return;
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(angle);
@@ -155,8 +155,8 @@ public class PlayerBullet extends Solid
         {
           score += 50;
           removeSolids.add(this);
-          removeSolids.add(s);
-          activeAnimations.add(new AnimationEnemyExplosion(pos));
+          removeSolids.add(s);          
+          activeAnimations.add(new AnimationEnemyExplosion(pos));       
           audio_enemy_small_death.stop();
           audio_enemy_small_death.play();
           break;

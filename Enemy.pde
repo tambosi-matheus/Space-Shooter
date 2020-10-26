@@ -77,14 +77,13 @@ public class SmallEnemy extends Solid
 
     if (explosionCounter > explosionTimer)
     {
-      if(PVector.dist(player.pos, pos) < range)
+      if (PVector.dist(player.pos, pos) < range)
         player.OnPlayerHit();
       audio_enemy_small_explosion.stop();
       audio_enemy_small_explosion.play();
       removeSolids.add(this);
       activeAnimations.add(new AnimationEnemyExplosion(pos));
-    }
-    else
+    } else
       explosionCounter += deltaTime;
   }
 
@@ -95,12 +94,12 @@ public class SmallEnemy extends Solid
     translate(pos.x, pos.y);
     rotate(angle);    
     image(image_enemy_small, 0, 0);
-    
-    if(isExploding)
+
+    if (isExploding)
     {
-     noFill();
-     stroke(map(explosionCounter, 0, explosionTimer, 0, 255), 0, 0);
-     circle(0, 0, explosionRange);
+      noFill();
+      stroke(map(explosionCounter, 0, explosionTimer, 0, 255), 0, 0);
+      circle(0, 0, explosionRange);
     }
 
     popMatrix();
@@ -114,7 +113,7 @@ public class MediumEnemy extends Solid
   private PVector acel, firePoint;
   private float fireOffset = 3, angle, 
     maxSpeed = 12, maxAcel = 0.8, 
-    range = height / 4, bulletSpeed = 20,
+    range = height / 4, bulletSpeed = 20, 
     fireRate = 2, fireCooldown;
 
   public MediumEnemy()
@@ -198,9 +197,11 @@ public class MediumEnemyBullet extends Solid
 
     this.angle = angle;
   }
-  
-  public PVector getPos(){return pos;}
-  
+
+  public PVector getPos() {
+    return pos;
+  }
+
   public void Update()
   {
     PVector add = vel.copy();
@@ -242,7 +243,7 @@ public class BigEnemy extends Solid
 {    
   private PVector acel;
   private float spawnOffset = 10, angle, 
-    maxSpeed = 10, maxAcel = 0.3,
+    maxSpeed = 10, maxAcel = 0.3, 
     range = height / 3, spawnRate = 7, spawnCooldown;
 
   public BigEnemy()
@@ -289,14 +290,14 @@ public class BigEnemy extends Solid
     spawnCooldown += deltaTime;
     if (PVector.dist(pos, player.pos) < range && spawnCooldown > 50/spawnRate)
     {
-        audio_enemy_big_spawn.play();
-        PVector spawnPos = pos.copy();
-        spawnPos.add(new PVector(random(-spawnOffset, spawnOffset), random(-spawnOffset, spawnOffset)));
-        addSolids.add(new SmallEnemy(spawnPos));
-        spawnCooldown = 0;
+      audio_enemy_big_spawn.play();
+      PVector spawnPos = pos.copy();
+      spawnPos.add(new PVector(random(-spawnOffset, spawnOffset), random(-spawnOffset, spawnOffset)));
+      addSolids.add(new SmallEnemy(spawnPos));
+      spawnCooldown = 0;
     }
   }
-  
+
   public void Show()
   {
     pushMatrix();

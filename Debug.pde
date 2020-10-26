@@ -1,8 +1,8 @@
 void Debug()
 {  
-  //ShowSolidsDebug();
+  ShowSolidsDebug();
   //ShowMousePlayerPointer();
-  //ShowCollisionGrid(4);
+  //ShowCollisionGrid(gridSize);
   //ShowCameraDebug();
 }
 
@@ -53,7 +53,7 @@ public void ShowSolidsDebug()
   println("Delta Time " + deltaTime);
   println("Active Solids: " + solids.size());
   println("Solids Added: " + addSolids.size());
-  println("Solids Removed: " + removeSolids.size()); 
+  println("Solids Removed: " + removeSolids.size());
 }
 
 //--------------------------------------------------------------------------------//
@@ -64,7 +64,7 @@ public void ShowCameraDebug()
   noStroke();
   fill(0, 255, 0);
   circle(camera.x, camera.y, 5);  
-  
+
   //camera desired position
   noStroke();
   fill(255, 0, 0);
